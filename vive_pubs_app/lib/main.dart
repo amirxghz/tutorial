@@ -10,22 +10,27 @@ import 'package:vive_pubs_app/affordable_pubs_screen.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget 
+{
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) 
+  {
+    return MaterialApp
+    (
       title: 'Vive Pubs',
       home: HomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget 
+{
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> 
+{
   List<Pubs> pubList = [];
   late Future<String> futurePubs;
 
@@ -36,26 +41,36 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  Widget build(BuildContext context) 
+  {
+    return Scaffold
+    (
+      appBar: AppBar
+      (
         title: Text('Vive Pubs'),
         backgroundColor: Colors.green,
       ),
-      body: Column(
-        children: [
+      body: Column
+      (
+        children: 
+        [
           Expanded(child: _buildPubs()),
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
+            child: ElevatedButton
+            (
+              style: ElevatedButton.styleFrom
+              (
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () 
+              {
+                Navigator.push
+                (
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute
+                  (
                     builder: (context) => AffordablePubsScreen(),
                   ),
                 );
@@ -68,15 +83,25 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPubs() {
-    return FutureBuilder(
-      builder: (context, projectSnap) {
-        if (projectSnap.connectionState == ConnectionState.none || projectSnap.hasData == false) {
-          return Text("No data or connection");
+  Widget _buildPubs() 
+  {
+    return FutureBuilder
+    (
+      builder: (context, projectSnap) 
+      {
+        if (projectSnap.hasData == false) 
+        {
+          return Text("No data");
         }
-        return ListView.builder(
+        else if (projectSnap.connectionState == ConnectionState.none)  
+        {
+          return Text("No connection");
+        }
+        return ListView.builder
+        (
           itemCount: pubList.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (context, index) 
+          {
             return PubCard(pubList[index]);
           },
         );
@@ -86,18 +111,23 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-Future<String> getPubs(pubList) async {
-  final Response response = await get(
+Future<String> getPubs(pubList) async 
+{
+  final Response response = await get
+  (
     Uri.parse('http://192.168.1.36:1337/api/pubs'),
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 200) 
+  {
     List<dynamic> rawList = jsonDecode(response.body);
-    for (var i = 0; i < rawList.length; i++) {
+    for (int i = 0; i < rawList.length; i++) 
+    {
       pubList.add(Pubs.fromJson(rawList[i]));
     }
     return "Success!";
-  } else 
+  } 
+  else 
   {
     throw Exception();
   }
